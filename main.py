@@ -13,7 +13,8 @@ class TrackerClient(discord.Client):
     self.commands = {
       'ping' : self.ping,
       'stats' : self.stats,
-      'track' : self.track
+      'track' : self.track,
+      'help' : self.help
     }
 
     try:
@@ -25,6 +26,7 @@ class TrackerClient(discord.Client):
 
   async def on_ready(self):
     print('Online now!')
+    await client.change_presence(game=discord.Game(name='@TrackerBot help'))
 
   async def on_message(self, message):
     if not await self.get_cmd(message):
@@ -81,6 +83,15 @@ class TrackerClient(discord.Client):
 
     with open('tracked.json', 'w') as f:
       json.dump(self.no_track, f)
+
+  async def help(self, message):
+    await message.channel.send(embed=discord.Embed(
+      description='''
+`help` : Show this page
+`stats [mention]` : Get online stats for a user
+`track [disable]` : Enable or disable tracking for yourself
+      '''
+    ))
 
   async def Update(self):
     await client.wait_until_ready()
