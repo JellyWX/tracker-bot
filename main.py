@@ -32,7 +32,26 @@ class TrackerClient(discord.Client):
     await message.channel.send('pong')
 
   async def stats(self, message):
-    await message.channel.send(self.tracker.data[message.author.id])
+    target = [x for x in message.content.split(' ')[1:] if x.startswith('<@')]
+
+    if len(target) > 0:
+      target = target[0][1:-1]
+      while target[0] not in '0123456789':
+        try:
+          target = target[1:]
+        except IndexError:
+          await message.channel.send('Error deciphering user tagged. Make sure it\'s formatted correctly!')
+          return
+
+      target = self.get_user(int(target))
+      if target == None:
+        await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real?')
+        return
+
+    em = discord.Embed(title='{} stats'.format(target.name))
+    for key, data in self.tracker.data[target.id].items():
+      em.add_field(name=key, value='{} minutes'.format(round(data/60)))
+    await message.channel.send(embed=em)
 
   async def Update(self):
     await client.wait_until_ready()
