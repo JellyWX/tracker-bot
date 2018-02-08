@@ -3,15 +3,25 @@ import discord
 import asyncio
 import sys
 import os
+import json
 
 class TrackerClient(discord.Client):
   def __init__(self, *args, **kwargs):
     super(TrackerClient, self).__init__(*args, **kwargs)
     self.tracker = Tracker(self)
+    self.no_track = []
     self.commands = {
       'ping' : self.ping,
-      'stats' : self.stats
+      'stats' : self.stats,
+      'track' : self.track
     }
+
+    try:
+      with open('tracked.json', 'r') as f:
+        self.no_track = json.load(f)
+    except FileNotFoundError:
+      with open('tracked.json', 'w') as f:
+        json.dump([], f)
 
   async def on_ready(self):
     print('Online now!')
@@ -21,7 +31,7 @@ class TrackerClient(discord.Client):
       pass
 
   async def get_cmd(self, message):
-    if self.user.id in map(lambda x: x.id, message.mentions):
+    if self.user.id in map(lambda x: x.id, message.mentions) and len(message.content.split(' ')) > 1:
       if message.content.split(' ')[1] in self.commands.keys():
         await self.commands[message.content.split(' ')[1]](message)
         return True
@@ -48,10 +58,29 @@ class TrackerClient(discord.Client):
         await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real?')
         return
 
+      if target.id not in self.tracker.data.keys():
+        message.channel.send('No tracking data for user mentioned.')
+
+    else:
+      target = message.author
+
     em = discord.Embed(title='{} stats'.format(target.name))
     for key, data in self.tracker.data[target.id].items():
       em.add_field(name=key, value='{} minutes'.format(round(data/60)))
     await message.channel.send(embed=em)
+
+  async def track(self, message):
+    if 'disable' in message.content:
+      await message.channel.send('Disabled tracking :thumbsup:')
+      self.no_track.append(message.author.id)
+    elif message.author.id in self.no_track:
+      await message.channel.send('Enabled tracking :thumbsup:')
+      self.no_track.remove(message.author.id)
+    else:
+      await message.channel.send('Tracking is currently enabled for you. Use `track disable` to disable tracking')
+
+    with open('tracked.json', 'w') as f:
+      json.dump(self.no_track, f)
 
   async def Update(self):
     await client.wait_until_ready()

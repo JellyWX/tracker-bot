@@ -32,6 +32,10 @@ class Tracker(object):
       if member.bot:
         continue
 
+      if member.id in self.client.no_track:
+        self.data[member.id] = {'None' : 0}
+        continue
+
       if member.id not in self.data.keys():
         self.data[member.id] = {'None' : 0}
 
