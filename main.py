@@ -40,6 +40,13 @@ class TrackerClient(discord.Client):
 
       return False
 
+    elif isinstance(message.channel, discord.DMChannel):
+      if message.content.split(' ')[0] in self.commands.keys():
+        await self.commands[message.content.split(' ')[0]](message)
+        return True
+
+      return False
+
   async def ping(self, message):
     await message.channel.send('pong')
 
