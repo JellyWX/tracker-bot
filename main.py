@@ -75,7 +75,7 @@ class TrackerClient(discord.Client):
 
     em = discord.Embed(title='{} stats'.format(target.name))
     for key, data in self.tracker.data[target.id].items():
-      em.add_field(name=key, value='{} minutes'.format(round(data/60)))
+      em.add_field(name=key, value='{} minutes'.format(round((data * self.tracker.INTERVAL)/60)))
     await message.channel.send(embed=em)
 
   async def track(self, message):

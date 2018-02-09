@@ -1,4 +1,5 @@
 import msgpack
+import discord
 
 class Tracker(object):
 
@@ -33,20 +34,23 @@ class Tracker(object):
         continue
 
       if member.id in self.client.no_track:
-        self.data[member.id] = {'None' : 0}
+        self.data[member.id] = {'Online' : 0, 'Offline' : 0}
         continue
 
       if member.id not in self.data.keys():
-        self.data[member.id] = {'None' : 0}
+        self.data[member.id] = {'Online' : 0, 'Offline' : 0}
 
       if member.game == None:
-        self.data[member.id]['None'] += self.INTERVAL
+        if member.status == discord.Status.online:
+          self.data[member.id]['Online'] += 1
+        if member.status == discord.Status.offline:
+          self.data[member.id]['Offline'] += 1
         continue
 
       if member.game.name not in self.data[member.id].keys():
         self.data[member.id][member.game.name] = 0
 
-      self.data[member.id][member.game.name] += self.INTERVAL
+      self.data[member.id][member.game.name] += 1
 
 
     with open('USER_DATA', 'wb') as f:
