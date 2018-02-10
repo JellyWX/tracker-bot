@@ -69,14 +69,11 @@ class TrackerClient(discord.Client):
         await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real?')
         return
 
-      if target.id not in self.tracker.data.keys():
-        message.channel.send('No tracking data for user mentioned.')
-
     else:
       target = message.author
 
-    em = discord.Embed(title='{} stats'.format(target.name))
-    for key, data in self.tracker.data[target.id].items():
+    em = discord.Embed(title='{}\'s stats'.format(target.name))
+    for key, data in self.tracker.getUser(target.id).items():
       em.add_field(name=key, value='{} minutes'.format(round((data * self.tracker.INTERVAL)/60)))
     await message.channel.send(embed=em)
 
@@ -90,7 +87,7 @@ class TrackerClient(discord.Client):
     else:
       await message.channel.send('Tracking is currently enabled for you. Use `track disable` to disable tracking')
 
-    with open('USER_tracked.json', 'w') as f:
+    with open('USER_TRACKED.json', 'w') as f:
       json.dump(self.no_track, f)
 
   async def help(self, message):
@@ -104,7 +101,7 @@ class TrackerClient(discord.Client):
 
   async def chart(self, message):
     pyplot.axis('equal')
-    pyplot.pie(self.tracker.data[message.author.id].values(), labels=self.tracker.data[message.author.id].keys())
+    pyplot.pie(self.tracker.getUser(message.author.id).values(), labels=self.tracker.getUser(message.author.id).keys(), autopct=lambda x: '{}mins'.format(round((x * self.tracker.INTERVAL)/60)))
     pyplot.savefig('curr.png')
     with open('curr.png', 'rb') as f:
       await message.channel.send(file=discord.File(f, 'chart.png'))

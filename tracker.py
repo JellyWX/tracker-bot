@@ -59,3 +59,9 @@ class Tracker(object):
 
     with open('USER_DATA', 'wb') as f:
       msgpack.pack(self.data, f)
+
+  def getUser(self, id : int):
+    if id not in self.data.keys():
+      return False
+    else:
+      return {x : y for x, y in self.data[id].items() if y > 0}
