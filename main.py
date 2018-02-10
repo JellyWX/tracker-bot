@@ -4,6 +4,8 @@ import asyncio
 import sys
 import os
 import json
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot
 
 class TrackerClient(discord.Client):
@@ -100,6 +102,8 @@ class TrackerClient(discord.Client):
     ))
 
   async def chart(self, message):
+    os.remove('curr.png')
+    pyplot.clf()
     pyplot.axis('equal')
     pyplot.pie(self.tracker.getUser(message.author.id).values(), labels=self.tracker.getUser(message.author.id).keys(), autopct=lambda x: '{}mins'.format(round((x * self.tracker.INTERVAL)/60)))
     pyplot.savefig('curr.png')
