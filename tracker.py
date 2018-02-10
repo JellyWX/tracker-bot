@@ -5,7 +5,7 @@ class Tracker(object):
 
   def __init__(self, client):
     self.client = client
-    self.data = {}
+    self.data = {'self' : {'Uptime' : 0}}
     self.INTERVAL = 20
 
     try:
@@ -18,6 +18,8 @@ class Tracker(object):
   async def Update(self):
     with open('USER_DATA-backup', 'wb') as f:
       msgpack.pack(self.data, f)
+
+    self.data['self']['Uptime'] += 1
 
     members = []
     member_ids = []
@@ -34,17 +36,19 @@ class Tracker(object):
         continue
 
       if member.id in self.client.no_track:
-        self.data[member.id] = {'Online' : 0, 'Offline' : 0}
+        self.data[member.id] = {'Online' : 0, 'Idle' : 0, 'DnD' : 0}
         continue
 
       if member.id not in self.data.keys():
-        self.data[member.id] = {'Online' : 0, 'Offline' : 0}
+        self.data[member.id] = {'Online' : 0, 'Idle' : 0, 'DnD' : 0}
 
       if member.game == None:
         if member.status == discord.Status.online:
           self.data[member.id]['Online'] += 1
-        if member.status == discord.Status.offline:
-          self.data[member.id]['Offline'] += 1
+        elif member.status == discord.Status.idle:
+          self.data[member.id]['Idle'] += 1
+        elif member.status == discord.Status.dnd:
+          self.data[member.id]['DnD'] += 1
         continue
 
       if member.game.name not in self.data[member.id].keys():

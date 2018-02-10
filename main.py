@@ -4,6 +4,7 @@ import asyncio
 import sys
 import os
 import json
+from matplotlib import pyplot
 
 class TrackerClient(discord.Client):
   def __init__(self, *args, **kwargs):
@@ -14,14 +15,15 @@ class TrackerClient(discord.Client):
       'ping' : self.ping,
       'stats' : self.stats,
       'track' : self.track,
-      'help' : self.help
+      'help' : self.help,
+      'chart' : self.chart
     }
 
     try:
-      with open('tracked.json', 'r') as f:
+      with open('USER_tracked.json', 'r') as f:
         self.no_track = json.load(f)
     except FileNotFoundError:
-      with open('tracked.json', 'w') as f:
+      with open('USER_tracked.json', 'w') as f:
         json.dump([], f)
 
   async def on_ready(self):
@@ -88,7 +90,7 @@ class TrackerClient(discord.Client):
     else:
       await message.channel.send('Tracking is currently enabled for you. Use `track disable` to disable tracking')
 
-    with open('tracked.json', 'w') as f:
+    with open('USER_tracked.json', 'w') as f:
       json.dump(self.no_track, f)
 
   async def help(self, message):
@@ -99,6 +101,13 @@ class TrackerClient(discord.Client):
 `track [disable]` : Enable or disable tracking for yourself
       '''
     ))
+
+  async def chart(self, message):
+    pyplot.axis('equal')
+    pyplot.pie(self.tracker.data[message.author.id].values(), labels=self.tracker.data[message.author.id].keys())
+    pyplot.savefig('curr.png')
+    with open('curr.png', 'rb') as f:
+      await message.channel.send(file=discord.File(f, 'chart.png'))
 
   async def Update(self):
     await client.wait_until_ready()
