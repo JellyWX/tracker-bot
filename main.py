@@ -102,9 +102,12 @@ class TrackerClient(discord.Client):
     ))
 
   async def chart(self, message):
+    user = self.tracker.getUser(message.author.id)
+
     pyplot.clf()
     pyplot.axis('equal')
-    pyplot.pie(self.tracker.getUser(message.author.id).values(), labels=self.tracker.getUser(message.author.id).keys(), autopct=lambda x: '{}mins'.format(round((x * self.tracker.INTERVAL)/60)))
+    t = sum(user.values())
+    pyplot.pie(user.values(), labels=user.keys(), autopct=lambda x: '{}mins'.format(int((((x * t) / 100) * self.tracker.INTERVAL) / 60)))
     pyplot.savefig('curr.png')
     with open('curr.png', 'rb') as f:
       await message.channel.send(file=discord.File(f, 'chart.png'))
