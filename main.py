@@ -22,10 +22,10 @@ class TrackerClient(discord.Client):
     }
 
     try:
-      with open('USER_tracked.json', 'r') as f:
+      with open('USER_TRACKED.json', 'r') as f:
         self.no_track = json.load(f)
     except FileNotFoundError:
-      with open('USER_tracked.json', 'w') as f:
+      with open('USER_TRACKED.json', 'w') as f:
         json.dump([], f)
 
   async def on_ready(self):
