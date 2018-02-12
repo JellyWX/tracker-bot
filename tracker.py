@@ -1,3 +1,4 @@
+import datetime
 import msgpack
 import discord
 
@@ -18,6 +19,8 @@ class Tracker(object):
   async def Update(self):
     with open('USER_DATA-backup', 'wb') as f:
       msgpack.pack(self.data, f)
+
+    self.clear()
 
     self.data['self']['Uptime'] += 1
 
@@ -65,3 +68,7 @@ class Tracker(object):
       return False
     else:
       return {x : y for x, y in self.data[id].items() if y > 0}
+
+  def clear(self):
+    if datetime.datetime.now().strftime('%A-%H-%M') == 'Monday-20-00':
+      self.data = {'self' : {'Uptime' : 0}}

@@ -98,6 +98,7 @@ class TrackerClient(discord.Client):
 `help` : Show this page
 `stats [mention]` : Get online stats for a user
 `track [disable]` : Enable or disable tracking for yourself
+`chart` : Generate a pie chart of your activities
       '''
     ))
 
