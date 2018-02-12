@@ -52,7 +52,10 @@ class TrackerClient(discord.Client):
       return False
 
   async def ping(self, message):
-    await message.channel.send('pong')
+    t = message.created_at.timestamp()
+    e = await message.channel.send('pong')
+    delta = e.created_at.timestamp() - t
+    await e.edit(content='Pong! {}ms round trip'.format(round(delta * 1000)))
 
   async def stats(self, message):
     target = [x for x in message.content.split(' ')[1:] if x.startswith('<@')]
