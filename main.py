@@ -110,8 +110,10 @@ class TrackerClient(discord.Client):
     t = sum(user.values())
     pyplot.pie(user.values(), labels=user.keys(), autopct=lambda x: '{}mins'.format(int((((x * t) / 100) * self.tracker.INTERVAL) / 60)))
     pyplot.savefig('curr.png')
-    with open('curr.png', 'rb') as f:
-      await message.channel.send(file=discord.File(f, 'chart.png'))
+
+    f = open('curr.png', 'rb')
+    await message.channel.send(file=discord.File(f, 'chart.png'))
+    f.close()
 
   async def Update(self):
     await client.wait_until_ready()
