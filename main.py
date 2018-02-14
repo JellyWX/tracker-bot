@@ -101,12 +101,32 @@ class TrackerClient(discord.Client):
 `help` : Show this page
 `stats [mention]` : Get online stats for a user
 `track [disable]` : Enable or disable tracking for yourself
-`chart` : Generate a pie chart of your activities
+`chart [ignore="Offline,Online,GameName..."]` : Generate a pie chart of your activities
       '''
     ))
 
   async def chart(self, message):
     user = self.tracker.getUser(message.author.id)
+
+    ignore_list = []
+    listing = False
+    for i in message.content.split(' '):
+      if i.startswith('ignore="'):
+        ignore_list.append(i)
+        listing = True
+      elif listing:
+        ignore_list.append(i)
+      elif i[-1] == '"':
+        ignore_list.append(i)
+        listing = False
+        break
+
+    if len(ignore_list) > 0:
+      ignore_list = ' '.join(ignore_list)
+      listed = ignore_list.split('"')[1].replace('"', '').split(',')
+      listed = [i.strip().lower() for i in listed]
+      print(listed)
+      user = {k: v for k, v in user.items() if k.lower() not in listed}
 
     pyplot.clf()
     pyplot.axis('equal')

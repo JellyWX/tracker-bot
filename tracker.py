@@ -1,7 +1,6 @@
 import datetime
 import msgpack
 import discord
-from errorzero import ErrOrZero
 
 class Tracker(object):
 
@@ -59,7 +58,6 @@ class Tracker(object):
         self.data[member.id][member.game.name] = 0
 
       self.data[member.id][member.game.name] += 1
-
 
     with open('USER_DATA', 'wb') as f:
       msgpack.pack(self.data, f)
