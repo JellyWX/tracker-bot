@@ -1,6 +1,7 @@
 import datetime
 import msgpack
 import discord
+from errorzero import ErrOrZero
 
 class Tracker(object):
 
@@ -67,7 +68,11 @@ class Tracker(object):
     if id not in self.data.keys():
       return False
     else:
-      return {x : y for x, y in self.data[id].items() if y > 0}
+      e = {x : y for x, y in self.data[id].items() if y > 0}
+      offline = self.data['self']['Uptime'] - sum(e.values())
+      if offline > 0:
+        e['Offline'] = offline
+      return e
 
   def clear(self):
     if datetime.datetime.now().strftime('%A-%H-%M') == 'Monday-20-00':
