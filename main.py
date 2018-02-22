@@ -143,6 +143,7 @@ class TrackerClient(discord.Client):
     while not client.is_closed():
       await self.tracker.Update()
 
+      print(self.tracker.data)
       await asyncio.sleep(self.tracker.INTERVAL)
 
   def get_patrons(self, level='Patrons'):

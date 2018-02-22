@@ -36,7 +36,7 @@ class Tracker(object):
 
     for member in members:
 
-      if member.bot or member not in patrons:
+      if member.bot or (member not in patrons and member not in self.client.get_guild(398546681618104323).members):
         continue
 
       if member.id in self.client.no_track:
