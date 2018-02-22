@@ -145,6 +145,13 @@ class TrackerClient(discord.Client):
 
       await asyncio.sleep(self.tracker.INTERVAL)
 
+  def get_patrons(self, level='Patrons'):
+    p_server = self.get_guild(350391364896161793)
+    p_role = discord.utils.get(p_server.roles, name=level)
+    premiums = [user for user in p_server.members if p_role in user.roles]
+
+    return premiums
+
 
 try: ## token grabbing code
   with open('token','r') as token_f:

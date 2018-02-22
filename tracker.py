@@ -26,6 +26,7 @@ class Tracker(object):
 
     members = []
     member_ids = []
+    patrons = self.client.get_patrons('Donor')
     for member in self.client.get_all_members():
       if member.id in member_ids:
         continue
@@ -35,7 +36,7 @@ class Tracker(object):
 
     for member in members:
 
-      if member.bot:
+      if member.bot or member not in patrons:
         continue
 
       if member.id in self.client.no_track:
