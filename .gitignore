@@ -105,6 +105,7 @@ venv.bak/
 .mypy_cache/
 
 token
+steam_key
 USER_*
 tracked.json
 curr.png
