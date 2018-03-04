@@ -26,7 +26,7 @@ class Tracker(object):
 
         members = []
         member_ids = []
-        patrons = self.client.get_patrons('Donor')
+        patrons = self.client.get_patrons()
         for member in self.client.get_all_members():
             if member.id in member_ids:
                 continue
@@ -76,4 +76,3 @@ class Tracker(object):
     def clear(self):
         if datetime.datetime.now().strftime('%A-%H-%M') == 'Monday-20-00':
             self.data = {'self' : {'Uptime' : 0}}
-
