@@ -153,7 +153,7 @@ class TrackerClient(discord.Client):
     def get_patrons(self):
         p_server = self.get_guild(350391364896161793)
         p_server2 = self.get_guild(366542432671760396)
-        p_roles = [discord.utils.get(p_server.roles, name='Donor'), discord.utils.get(p_server.roles, name='Premium!')]
+        p_roles = [discord.utils.get(p_server.roles, name='Donor'), discord.utils.get(p_server2.roles, name='Premium!')]
         premiums = [user for user in itertools.chain(p_server.members, p_server2.members) if any([p in user.roles for p in p_roles])]
 
         return premiums
