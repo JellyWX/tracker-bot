@@ -20,7 +20,8 @@ class TrackerClient(discord.Client):
             'stats' : self.stats,
             'track' : self.track,
             'help' : self.help,
-            'chart' : self.chart
+            'chart' : self.chart,
+            'age' : self.age_users
         }
 
         try:
@@ -149,6 +150,11 @@ class TrackerClient(discord.Client):
             await self.tracker.Update()
 
             await asyncio.sleep(self.tracker.INTERVAL)
+
+    async def age_users(self, message):
+        users = [x for x in message.guild.members]
+        users.sort(key=lambda x: x.created_at.timestamp())
+        await message.channel.send('\n'.join(map(lambda x: x.name, users)))
 
     def get_patrons(self):
         p_server = self.get_guild(350391364896161793)
