@@ -76,7 +76,7 @@ class TrackerClient(discord.Client):
 
             target = self.get_user(int(target))
             if target == None:
-                await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real?')
+                await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real and a patron?')
                 return
 
         else:
