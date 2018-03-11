@@ -65,7 +65,7 @@ class Tracker(object):
 
     def getUser(self, id : int):
         if id not in self.data.keys():
-            return False
+            return None
         else:
             e = {x : y for x, y in self.data[id].items() if y > 0}
             offline = self.data['self']['Uptime'] - sum(e.values())
@@ -76,4 +76,3 @@ class Tracker(object):
     def clear(self):
         if datetime.datetime.now().strftime('%A-%H-%M') == 'Monday-20-00':
             self.data = {'self' : {'Uptime' : 0}}
-

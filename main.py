@@ -156,41 +156,10 @@ class TrackerClient(discord.Client):
 
         return premiums
 
-    async def insurgency(self, message):
-        await self.grab_steam_game(222880, message)
-
-    async def csgo(self, message):
-        await self.grab_steam_game(730, message)
-
-    async def grab_steam_game(self, game, message):
-        if len(message.content.split(' ')) != 3:
-            await message.channel.send('Please enter your SteamID 64 with the command. You can find yours at https://steamidfinder.com/')
-            return
-
-        player_id = message.content.split(' ')[-1]
-
-        r = await self.fetch_url('http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid={}&key={}&steamid={}'.format(game, steam_key, player_id))
-        print(r)
-        if r:
-            await message.channel.send(r['playerstats']['stats'])
-        else:
-            await message.channel.send('No data could be found. Are you sure that user exists?')
-
-    async def fetch_url(self, url):
-        print(url)
-
-        async with aiohttp.ClientSession() as sesh:
-            async with sesh.get(url) as r:
-                print(r.status)
-                return await r.json()
-
 
 try: ## token grabbing code
     with open('token', 'r') as token_f:
         token = token_f.read().strip('\n')
-
-    with open('steam_key', 'r') as token_f:
-        steam_key = token_f.read().strip('\n')
 
 except:
     print('no token/s provided')
