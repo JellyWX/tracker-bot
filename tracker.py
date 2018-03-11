@@ -28,14 +28,15 @@ class Tracker(object):
         for member in self.client.get_all_members():
             if member.id in member_ids:
                 continue
-            else:
-                members.append(member)
-                member_ids.append(member.id)
+            if member.bot:
+                continue
+            for m in member.guild:
+                if m in patrons:
+                    members.append(member)
+                    member_ids.append(member.id)
+                    break
 
         for member in members:
-
-            if member.bot or (member not in patrons and member not in self.client.get_guild(398546681618104323).members):
-                continue
 
             if member.id in self.client.no_track:
                 self.data[member.id] = {'Online' : 0, 'Idle' : 0, 'DnD' : 0}
