@@ -154,7 +154,15 @@ class TrackerClient(discord.Client):
     async def age_users(self, message):
         users = [x for x in message.guild.members]
         users.sort(key=lambda x: x.created_at.timestamp())
-        await message.channel.send('\n'.join(map(lambda x: x.name, users)))
+
+        string = '\n'.join(map(lambda x: x.name, users))
+
+        new_str = ''
+        for i in string:
+            new_str += i
+            if len(new_str) > 1900:
+                await message.channel.send(new_str)
+                new_str = ''
 
     def get_patrons(self):
         p_server = self.get_guild(350391364896161793)
