@@ -24,10 +24,10 @@ class TrackerClient(discord.Client):
         }
 
         try:
-            with open('USER_TRACKED.json', 'r') as f:
+            with open('DATA/USER_TRACKED.json', 'r') as f:
                 self.no_track = json.load(f)
         except FileNotFoundError:
-            with open('USER_TRACKED.json', 'w') as f:
+            with open('DATA/USER_TRACKED.json', 'w') as f:
                 json.dump([], f)
 
     async def on_ready(self):
@@ -94,7 +94,7 @@ class TrackerClient(discord.Client):
         else:
             await message.channel.send('Tracking is currently enabled for you. Use `track disable` to disable tracking')
 
-        with open('USER_TRACKED.json', 'w') as f:
+        with open('DATA/USER_TRACKED.json', 'w') as f:
             json.dump(self.no_track, f)
 
     async def help(self, message):
