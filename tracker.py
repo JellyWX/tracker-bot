@@ -1,5 +1,5 @@
 import datetime
-import sqlite3
+import zlib
 import msgpack
 import discord
 
@@ -11,16 +11,13 @@ class Tracker(object):
         self.INTERVAL = 20
 
         try:
-            with open('USER_DATA', 'rb') as f:
-                self.data = msgpack.unpack(f, encoding='utf8')
+            with open('DATA/USER_DATA', 'rb') as f:
+                self.data = msgpack.unpackb(zlib.decompress(f.read()), encoding='utf8')
         except FileNotFoundError:
-            with open('USER_DATA', 'wb') as f:
-                msgpack.pack(self.data, f)
+            with open('DATA/USER_DATA', 'wb') as f:
+                f.write(zlib.compress(msgpack.packb(self.data)))
 
     async def Update(self):
-        with open('USER_DATA-backup', 'wb') as f:
-            msgpack.pack(self.data, f)
-
         self.clear()
 
         self.data['self']['Uptime'] += 1
@@ -62,7 +59,7 @@ class Tracker(object):
             self.data[member.id][member.game.name] += 1
 
         with open('USER_DATA', 'wb') as f:
-            msgpack.pack(self.data, f)
+            f.write(zlib.compress(msgpack.packb(self.data)))
 
     def getUser(self, id : int):
         if id not in self.data.keys():
