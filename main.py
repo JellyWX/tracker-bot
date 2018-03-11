@@ -72,12 +72,15 @@ class TrackerClient(discord.Client):
                     return
 
             target = self.get_user(int(target))
-            if target == None:
+            if target is None:
                 await message.channel.send('Couldn\'t find user tagged. Are you sure they\'re real and a patron?')
                 return
 
         else:
             target = message.author
+
+        if self.tracker.getUser(target.id) is None:
+            return
 
         em = discord.Embed(title='{}\'s stats'.format(target.name))
         for key, data in self.tracker.getUser(target.id).items():

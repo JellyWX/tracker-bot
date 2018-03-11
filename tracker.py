@@ -59,7 +59,7 @@ class Tracker(object):
 
             self.data[member.id][member.game.name] += 1
 
-        with open('USER_DATA', 'wb') as f:
+        with open('DATA/USER_DATA', 'wb') as f:
             f.write(zlib.compress(msgpack.packb(self.data)))
 
     def getUser(self, id : int):
