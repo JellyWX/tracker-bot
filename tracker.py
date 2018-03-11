@@ -30,7 +30,7 @@ class Tracker(object):
                 continue
             if member.bot:
                 continue
-            for m in member.guild:
+            for m in member.guild.members:
                 if m in patrons:
                     members.append(member)
                     member_ids.append(member.id)
