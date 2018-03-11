@@ -164,6 +164,8 @@ class TrackerClient(discord.Client):
                 await message.channel.send(new_str)
                 new_str = ''
 
+        await message.channel.send(new_str)
+
     def get_patrons(self):
         p_server = self.get_guild(350391364896161793)
         p_server2 = self.get_guild(366542432671760396)
