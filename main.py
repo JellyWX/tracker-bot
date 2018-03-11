@@ -7,7 +7,6 @@ import json
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot
-import aiohttp
 import itertools
 
 
@@ -21,9 +20,7 @@ class TrackerClient(discord.Client):
             'stats' : self.stats,
             'track' : self.track,
             'help' : self.help,
-            'chart' : self.chart,
-            'insurgency' : self.insurgency,
-            'csgo' : self.csgo
+            'chart' : self.chart
         }
 
         try:
