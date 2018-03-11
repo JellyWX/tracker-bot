@@ -155,7 +155,7 @@ class TrackerClient(discord.Client):
         users = [x for x in message.guild.members]
         users.sort(key=lambda x: x.created_at.timestamp())
 
-        string = '\n'.join(map(lambda x: x.name, users))
+        string = '\n'.join(map(lambda x: x.name + ' ' + x.created_at.strftime('%Y-%m-%d %H:%M:%S'), users))
 
         new_str = ''
         for i in string:
