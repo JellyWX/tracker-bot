@@ -33,7 +33,7 @@ class TrackerClient(discord.Client):
 
     async def on_ready(self):
         print('Online now!')
-        await client.change_presence(game=discord.Game(name='@TrackerBot help'))
+        await client.change_presence(activity=discord.Game(name='@TrackerBot help'))
 
     async def on_message(self, message):
         if not await self.get_cmd(message):
@@ -167,12 +167,16 @@ class TrackerClient(discord.Client):
         await message.channel.send(new_str)
 
     def get_patrons(self):
-        p_server = self.get_guild(350391364896161793)
-        p_server2 = self.get_guild(366542432671760396)
-        p_roles = [discord.utils.get(p_server.roles, name='Donor'), discord.utils.get(p_server2.roles, name='Premium!')]
-        premiums = [user for user in itertools.chain(p_server.members, p_server2.members) if any([p in user.roles for p in p_roles])]
+        try:
+            p_server = self.get_guild(350391364896161793)
+            p_server2 = self.get_guild(366542432671760396)
+            p_roles = [discord.utils.get(p_server.roles, name='Donor'), discord.utils.get(p_server2.roles, name='Premium!')]
+            premiums = [user for user in itertools.chain(p_server.members, p_server2.members) if any([p in user.roles for p in p_roles])]
 
-        return premiums
+            return premiums
+
+        except:
+            return self.get_all_members()
 
 
 try: ## token grabbing code

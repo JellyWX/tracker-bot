@@ -45,7 +45,7 @@ class Tracker(object):
             if member.id not in self.data.keys():
                 self.data[member.id] = {'Online' : 0, 'Idle' : 0, 'DnD' : 0}
 
-            if member.game == None:
+            if member.activity == None:
                 if member.status == discord.Status.online:
                     self.data[member.id]['Online'] += 1
                 elif member.status == discord.Status.idle:
@@ -54,10 +54,10 @@ class Tracker(object):
                     self.data[member.id]['DnD'] += 1
                 continue
 
-            if member.game.name not in self.data[member.id].keys():
-                self.data[member.id][member.game.name] = 0
+            if member.activity.name not in self.data[member.id].keys():
+                self.data[member.id][member.activity.name] = 0
 
-            self.data[member.id][member.game.name] += 1
+            self.data[member.id][member.activity.name] += 1
 
         with open('DATA/USER_DATA', 'wb') as f:
             f.write(zlib.compress(msgpack.packb(self.data)))
