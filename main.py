@@ -41,10 +41,10 @@ class TrackerClient(discord.Client):
             async with session.post('https://api.fusiondiscordbots.co.uk/{}/'.format(self.user.id), data={'token' : 'rv:J-HuSELAfy0pb', 'guilds' : len(self.guilds), 'members' : len([x for x in self.get_all_members()])}) as resp:
                 print('returned {0.status} from api.fusiondiscordbots.co.uk'.format(resp))
 
-    async def on_guild_join():
+    async def on_guild_join(self, *args):
         await self.send()
 
-    async def on_guild_remove():
+    async def on_guild_remove(self, *args):
         await self.send()
 
     async def on_message(self, message):
