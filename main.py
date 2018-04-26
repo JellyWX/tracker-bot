@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot
 import itertools
+import aiohttp
 
 
 class TrackerClient(discord.Client):
@@ -34,6 +35,17 @@ class TrackerClient(discord.Client):
     async def on_ready(self):
         print('Online now!')
         await client.change_presence(activity=discord.Game(name='@TrackerBot help'))
+
+    async def send():
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://api.fusiondiscordbots.co.uk/{}/'.format(self.user.id), data={'token' : 'rv:J-HuSELAfy0pb', 'guilds' : len(self.guilds), 'members' : len([x for x in self.get_all_members()])}) as resp:
+                print('returned {0.status} from api.fusiondiscordbots.co.uk'.format(resp))
+
+    async def on_guild_join():
+        await self.send()
+
+    async def on_guild_remove():
+        await self.send()
 
     async def on_message(self, message):
         if not await self.get_cmd(message):
