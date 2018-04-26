@@ -36,7 +36,7 @@ class TrackerClient(discord.Client):
         print('Online now!')
         await client.change_presence(activity=discord.Game(name='@TrackerBot help'))
 
-    async def send():
+    async def send(self):
         async with aiohttp.ClientSession() as session:
             async with session.post('https://api.fusiondiscordbots.co.uk/{}/'.format(self.user.id), data={'token' : 'rv:J-HuSELAfy0pb', 'guilds' : len(self.guilds), 'members' : len([x for x in self.get_all_members()])}) as resp:
                 print('returned {0.status} from api.fusiondiscordbots.co.uk'.format(resp))
